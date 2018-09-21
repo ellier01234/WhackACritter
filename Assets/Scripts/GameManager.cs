@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour {
     public List<GameObject> critterPrefabs;
     public float critterSpawnFreqency = 1.0f;
     public Score scoreDisplay;
+    public Timer timer;
 
     private float lastCritterSpawn = 0;
 	// Use this for initialization
@@ -19,7 +20,7 @@ public class GameManager : MonoBehaviour {
 
         // check if its time to spawn the next critter
         float nextSpawnTime = lastCritterSpawn + critterSpawnFreqency;
-        if (Time.time >= lastCritterSpawn + critterSpawnFreqency)
+        if (Time.time >= nextSpawnTime && timer.IsTimerRunning() == true)
         {
             // it is time! 
             int critterIndex = Random.Range(0, critterPrefabs.Count);
@@ -31,9 +32,10 @@ public class GameManager : MonoBehaviour {
             // get access to our Critter script
             Critter critterScript = spawnedCritter.GetComponent<Critter>();
 
-            // tell the critter script the score object 
+            // tell the critter script the score and timer  object 
             critterScript.scoreDisplay = scoreDisplay;
-
+            critterScript.timer = timer;
+           
             // update the most recent critter spawn to now 
             lastCritterSpawn = Time.time;
 
